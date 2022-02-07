@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon chatbotserver.js"
+    "start":"node chatbotserver.js"
   },
   "author": "",
   "license": "ISC",
