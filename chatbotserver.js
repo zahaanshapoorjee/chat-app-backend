@@ -11,7 +11,12 @@ app.use(cors)
 
 const port = process.env.PORT || 3001
 const server = http.createServer(app)
-const io = new Server(server)
+const io = new Server(server,{
+    cors:{
+        origin:"https://zahaanshapoorjee-chat-app.netlify.app/",
+        methods:"GET,POST"
+    }
+})
 io.on("connection",(socket)=>{
     console.log(`User ID:${socket.id} has connected... `)
 
