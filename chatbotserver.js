@@ -30,9 +30,6 @@ io.on("connection",(socket)=>{
 server.listen(port,()=>{
     console.log('Server is Online...')
 })
-const port = server.address().port;
-console.log(`Express is working on port ${port}`);
-
 app.get('/',(req,res)=>{
     res.send("Server is Online!")
 })
