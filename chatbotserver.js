@@ -13,7 +13,7 @@ const port = process.env.PORT || 3001
 const server = http.createServer(app)
 const io = new Server(server,{
     cors:{
-        origin:"https://zahaanshapoorjee-chat-app.netlify.app/",
+        origin:"*",
         methods:"GET,POST"
     }
 })
