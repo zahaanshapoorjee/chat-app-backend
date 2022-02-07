@@ -4,13 +4,14 @@ import cors from 'cors'
 import {Server} from 'socket.io'
 
 const app=express()
-
+app.get('/',(req,res)=>{
+    res.send("Server is ONLINE.")   
+})
 app.use(cors)
 
 const port = process.env.PORT || 3001
 const server = http.createServer(app)
 const io = new Server(server)
-
 io.on("connection",(socket)=>{
     console.log(`User ID:${socket.id} has connected... `)
 
@@ -30,8 +31,3 @@ io.on("connection",(socket)=>{
 server.listen(port,()=>{
     console.log('Server is Online...')
 })
-app.get('/',(req,res)=>{
-    res.send("Server is Online!")
-})
-
-
