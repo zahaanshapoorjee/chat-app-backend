@@ -17,12 +17,29 @@ const io = new Server(server,{
         methods:"GET,POST"
     }
 })
+
+const users = []
+function userLeave(id) {
+    const index = users.findIndex(user => user.id === id);
+  
+    if (index !== -1) {
+      return users.splice(index, 1)[0];
+    }
+  }
+function getRoomUsers(room) {
+    return users.filter(user => user.room === room);
+  }
 io.on("connection",(socket)=>{
     console.log(`User ID:${socket.id} has connected... `)
 
     socket.on("joinRoom",(data)=>{
         socket.join(data.room)
         console.log(`User: ${data.username} has joined room: ${data.room}`)
+        const user = {id:socket.id,username:data.username,room:data.room}
+        users.push(user)
+
+        io.to(user.room).emit('roomInfo',{room:user.room,users:getRoomUsers(user.room)})
+
     })
     socket.on("sendMessage",(data)=>{ 
         socket.to(data.room).emit("recieveMessage",data)
@@ -30,7 +47,21 @@ io.on("connection",(socket)=>{
     })
     socket.on("disconnect",()=>{
         console.log(`User ID:${socket.id} has disconnected... `)
-    })
+        const user = userLeave(socket.id);
+
+        if (user) {
+          io.to(user.room).emit(
+            'message',
+            formatMessage(botName, `${user.username} has left the chat`)
+          );
+    
+          // Send users and room info
+          io.to(user.room).emit('roomInfo', {
+            room: user.room,
+            users: getRoomUsers(user.room)
+          });
+        }
+      });
 })
 
 server.listen(port,()=>{
