@@ -20,8 +20,23 @@ const io = new Server(server,{
 io.on("connection",(socket)=>{
     console.log(`User ID:${socket.id} has connected... `)
 
+    const users = []
+
+    const user = { id, username, room } 
+    users.push(user)
+
+    const getUsersInRoom = (room) => {
+    return users.filter((user) => user.room === room)
+    }
+
+
     socket.on("joinRoom",(data)=>{
         socket.join(data.room)
+        socket.to(data.room).emit('roomInfo',{
+            room:data.room,
+            users:getUsersInRoom(data.room)
+        })
+        callback()
         console.log(`User: ${data.username} has joined room: ${data.room}`)
     })
     socket.on("sendMessage",(data)=>{ 
@@ -30,6 +45,11 @@ io.on("connection",(socket)=>{
     })
     socket.on("disconnect",()=>{
         console.log(`User ID:${socket.id} has disconnected... `)
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+          })
+        
     })
 })
 
