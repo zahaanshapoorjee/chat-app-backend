@@ -46,7 +46,6 @@ io.on("connection",(socket)=>{
         console.log(data.room)
     })
     socket.on("disconnect",()=>{
-        console.log(`User ID:${socket.id} has disconnected... `)
         const user = userLeave(socket.id);
 
         if (user) {
